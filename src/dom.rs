@@ -15,7 +15,7 @@ struct ElementData {
     attributes: AttrMap,
 }
 
-type AttrMap = HashMap<String, String>;
+pub type AttrMap = HashMap<String, String>;
 
 pub fn elem(name: String, attr: AttrMap, children: Vec<Node>) -> Node {
     Node {
