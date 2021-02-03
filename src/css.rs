@@ -1,22 +1,22 @@
 use super::parser::BaseParser;
 
 pub struct Stylesheet {
-    rules: Vec<Rule>,
+    pub rules: Vec<Rule>,
 }
 
-struct Rule {
-    selectors: Vec<Selector>,
-    declarations: Vec<Declaration>,
+pub struct Rule {
+    pub selectors: Vec<Selector>,
+    pub declarations: Vec<Declaration>,
 }
 
-enum Selector {
+pub enum Selector {
     Simple(SimpleSelector),
 }
 
-struct SimpleSelector {
-    tag_name: Option<String>,
-    id: Option<String>,
-    class: Vec<String>,
+pub struct SimpleSelector {
+    pub tag_name: Option<String>,
+    pub id: Option<String>,
+    pub class: Vec<String>,
 }
 
 impl Selector {
@@ -31,22 +31,25 @@ impl Selector {
 
 pub type Specificity = (usize, usize, usize);
 
-struct Declaration {
-    name: String,
-    value: Value,
+pub struct Declaration {
+    pub name: String,
+    pub value: Value,
 }
 
-enum Value {
+#[derive(Clone)]
+pub enum Value {
     Keyword(String),
     Length(f32, Unit),
     ColorValue(Color),
 }
 
-enum Unit {
+#[derive(Clone)]
+pub enum Unit {
     Px,
 }
 
-struct Color {
+#[derive(Clone)]
+pub struct Color {
     r: u8,
     g: u8,
     b: u8,
