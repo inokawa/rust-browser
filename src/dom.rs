@@ -12,7 +12,7 @@ pub enum NodeType {
 
 pub struct ElementData {
     pub tag_name: String,
-    attributes: AttrMap,
+    pub attributes: AttrMap,
 }
 
 impl ElementData {

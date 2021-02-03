@@ -1,4 +1,4 @@
-use super::css::{Rule, Selector, SimpleSelector, Specificity, Stylesheet, Value};
+use super::css::{parse_inline, Rule, Selector, SimpleSelector, Specificity, Stylesheet, Value};
 use super::dom::{ElementData, Node, NodeType};
 use std::collections::HashMap;
 
@@ -78,5 +78,13 @@ fn specified_values(elem: &ElementData, stylesheet: &Stylesheet) -> PropertyMap 
             values.insert(declaration.name.clone(), declaration.value.clone());
         }
     }
+    let inline_styles = elem.attributes.iter().filter(|(k, _)| k == &"style");
+    inline_styles.for_each(|(_, v)| {
+        parse_inline((&v).to_string())
+            .iter()
+            .for_each(|declaration| {
+                values.insert(declaration.name.clone(), declaration.value.clone());
+            })
+    });
     return values;
 }
