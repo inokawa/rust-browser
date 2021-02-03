@@ -6,14 +6,37 @@ type MatchedRule<'a> = (Specificity, &'a Rule);
 
 type PropertyMap = HashMap<String, Value>;
 
-pub struct StyleNode<'a> {
-    node: &'a Node,
-    specified_values: PropertyMap,
-    children: Vec<StyleNode<'a>>,
+pub struct StyledNode<'a> {
+    pub node: &'a Node,
+    pub specified_values: PropertyMap,
+    pub children: Vec<StyledNode<'a>>,
 }
 
-pub fn style_tree<'a>(root: &'a Node, stylesheet: &Stylesheet) -> StyleNode<'a> {
-    StyleNode {
+impl StyledNode<'_> {
+    pub fn value(&self, name: &str) -> Option<Value> {
+        self.specified_values.get(name).map(|v| v.clone())
+    }
+
+    pub fn display(&self) -> Display {
+        match self.value("display") {
+            Some(Value::Keyword(s)) => match &*s {
+                "block" => Display::Block,
+                "none" => Display::None,
+                _ => Display::Inline,
+            },
+            _ => Display::Inline,
+        }
+    }
+}
+
+pub enum Display {
+    Inline,
+    Block,
+    None,
+}
+
+pub fn style_tree<'a>(root: &'a Node, stylesheet: &Stylesheet) -> StyledNode<'a> {
+    StyledNode {
         node: root,
         specified_values: match root.node_type {
             NodeType::Element(ref elem) => specified_values(elem, stylesheet),
