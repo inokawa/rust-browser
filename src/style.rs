@@ -17,6 +17,11 @@ impl StyledNode<'_> {
         self.specified_values.get(name).map(|v| v.clone())
     }
 
+    pub fn lookup(&self, name: &str, fallback_name: &str, default: &Value) -> Value {
+        self.value(name)
+            .unwrap_or_else(|| self.value(fallback_name).unwrap_or_else(|| default.clone()))
+    }
+
     pub fn display(&self) -> Display {
         match self.value("display") {
             Some(Value::Keyword(s)) => match &*s {
