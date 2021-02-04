@@ -3,11 +3,11 @@ use super::style::StyledNode;
 use std::default::Default;
 
 #[derive(Default, Clone, Copy)]
-struct Dimensions {
-    content: Rect,
-    padding: EdgeSizes,
-    border: EdgeSizes,
-    margin: EdgeSizes,
+pub struct Dimensions {
+    pub content: Rect,
+    pub padding: EdgeSizes,
+    pub border: EdgeSizes,
+    pub margin: EdgeSizes,
 }
 
 impl Dimensions {
@@ -25,11 +25,11 @@ impl Dimensions {
 }
 
 #[derive(Default, Clone, Copy)]
-struct Rect {
-    x: f32,
-    y: f32,
-    width: f32,
-    height: f32,
+pub struct Rect {
+    pub x: f32,
+    pub y: f32,
+    pub width: f32,
+    pub height: f32,
 }
 
 impl Rect {
@@ -44,24 +44,24 @@ impl Rect {
 }
 
 #[derive(Default, Clone, Copy)]
-struct EdgeSizes {
-    left: f32,
-    right: f32,
-    top: f32,
-    bottom: f32,
+pub struct EdgeSizes {
+    pub left: f32,
+    pub right: f32,
+    pub top: f32,
+    pub bottom: f32,
 }
 
 #[derive(Clone, Copy)]
-enum BoxType<'a> {
+pub enum BoxType<'a> {
     BlockNode(&'a StyledNode<'a>),
     InlineNode(&'a StyledNode<'a>),
     AnonymousBlock,
 }
 
-struct LayoutBox<'a> {
-    dimensions: Dimensions,
-    box_type: BoxType<'a>,
-    children: Vec<LayoutBox<'a>>,
+pub struct LayoutBox<'a> {
+    pub dimensions: Dimensions,
+    pub box_type: BoxType<'a>,
+    pub children: Vec<LayoutBox<'a>>,
 }
 
 impl<'a> LayoutBox<'a> {
@@ -221,6 +221,17 @@ impl<'a> LayoutBox<'a> {
             }
         }
     }
+}
+
+pub fn layout_tree<'a>(
+    node: &'a StyledNode<'a>,
+    mut containing_block: Dimensions,
+) -> LayoutBox<'a> {
+    containing_block.content.height = 0.0;
+
+    let mut root_box = build_layout_tree(node);
+    root_box.layout(containing_block);
+    root_box
 }
 
 fn build_layout_tree<'a>(style_node: &'a StyledNode<'a>) -> LayoutBox<'a> {
