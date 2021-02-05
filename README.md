@@ -1,6 +1,6 @@
 # rust-browser
 
-Toy browser engine implementation with Rust.
+A toy browser engine implementation with Rust.
 
 Following:
 
