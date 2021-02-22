@@ -2,6 +2,8 @@
 
 A toy browser engine implementation with Rust.
 
+<img src="./screenshot.png" height="500px" />
+
 Following the tutorial:
 
 - https://limpet.net/mbrubeck/2014/08/08/toy-layout-engine-1.html
